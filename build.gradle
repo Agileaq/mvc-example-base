@@ -25,14 +25,14 @@ buildscript {
         maven { url 'http://repo.spring.io/plugins-release' }
     }
     dependencies {
-        classpath 'io.spring.gradle:dependency-management-plugin:0.6.0.RELEASE'
+        classpath 'io.spring.gradle:dependency-management-plugin:1.0.0.RC1'
         classpath 'org.springframework.build.gradle:propdeps-plugin:0.0.7'
     }
 }
 
 dependencyManagement {
     imports {
-        mavenBom 'io.spring.platform:platform-bom:2.0.7.RELEASE'
+        mavenBom 'io.spring.platform:platform-bom:Athens-SR1'
     }
 }
 
@@ -40,6 +40,10 @@ dependencies {
     compile 'org.springframework:spring-webmvc'
     compile 'com.fasterxml.jackson.jaxrs:jackson-jaxrs-json-provider'
     compile 'org.slf4j:jcl-over-slf4j'
+    // ----------  spring session with redis start  ----------
+    compile "org.springframework.session:spring-session-data-redis",
+            "biz.paluch.redis:lettuce"
+    // ----------  spring session with redis end  ----------
     provided 'javax.servlet:javax.servlet-api'
 }
 
