@@ -15,6 +15,7 @@ apply plugin: 'propdeps-eclipse'
 sourceCompatibility = 1.7
 
 repositories {
+    mavenCentral()
     jcenter()
 }
 
@@ -32,18 +33,40 @@ buildscript {
 
 dependencyManagement {
     imports {
-        mavenBom 'io.spring.platform:platform-bom:Athens-SR1'
+        //mavenBom 'io.spring.platform:platform-bom:Athens-SR1'
+        mavenBom 'io.spring.platform:platform-bom:1.1.4.RELEASE'
     }
 }
 
 dependencies {
     compile 'org.springframework:spring-webmvc'
-    compile 'com.fasterxml.jackson.jaxrs:jackson-jaxrs-json-provider'
+    //compile 'com.fasterxml.jackson.jaxrs:jackson-jaxrs-json-provider'
+    compile 'com.fasterxml.jackson.jaxrs:jackson-jaxrs-json-provider:2.4.6'
     compile 'org.slf4j:jcl-over-slf4j'
     // ----------  spring session with redis start  ----------
-    compile "org.springframework.session:spring-session-data-redis",
-            "biz.paluch.redis:lettuce"
+
+    compile "org.springframework.session:spring-session-data-redis:1.2.0.RC2"
+    compile "org.springframework.data:spring-data-redis:1.6.2.RELEASE"
+    compile "org.springframework.session:spring-session:1.2.0.RC2"
+    compile "biz.paluch.redis:lettuce:3.5.0.Final"
+    compile "redis.clients:jedis:2.6.2"
+//    compile "org.apache.commons:commons-pool2"
+
+//    compile "org.springframework.data:spring-data-redis:1.7.1.RELEASE"
+//    compile "org.springframework.session:spring-session:1.2.2.RELEASE"
+//    compile "org.springframework.data:spring-data-keyvalue:1.0.1.RELEASE"
+//    compile "biz.paluch.redis:lettuce:3.5.0.Final"
+
+//    compile "org.springframework.session:spring-session-data-redis"
+//    compile "biz.paluch.redis:lettuce"
+
+
     // ----------  spring session with redis end  ----------
+
+    // ---------- jwt start ----------
+    compile 'com.auth0:java-jwt:3.0.2'
+    // ---------- jwt end ----------
+
     provided 'javax.servlet:javax.servlet-api'
 }
 

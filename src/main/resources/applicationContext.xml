@@ -21,34 +21,37 @@
     <!--<context:component-scan base-package="personal.arc.mvc" />-->
     <context:annotation-config/>
     <bean class="org.springframework.session.data.redis.config.annotation.web.http.RedisHttpSessionConfiguration"/>
-    <bean class="org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory">
-        <constructor-arg name="sentinelConfiguration" ref="redisSentinelConfiguration"></constructor-arg>
-        <property name="password" value="mypass1" />
+
+    <bean id="jedisConnectionFactory" class="org.springframework.data.redis.connection.jedis.JedisConnectionFactory">
+        <constructor-arg name="sentinelConfig" ref="redisSentinelConfiguration"></constructor-arg>
+        <constructor-arg name="poolConfig" ref="redisPoolConfig"></constructor-arg>
+        <!-- <property name="password" value="mypass1" /> -->
+        <property name="database" value="0" />
+    </bean>
+
+    <bean id="redisPoolConfig" class="redis.clients.jedis.JedisPoolConfig">
+        <property name="maxIdle" value="300" />
+        <property name="maxTotal" value="300" />
+        <property name="maxWaitMillis" value="200" />
+        <property name="testOnBorrow" value="true" />
     </bean>
 
     <bean id="redisSentinelConfiguration" lazy-init="true" class="org.springframework.data.redis.connection.RedisSentinelConfiguration">
         <constructor-arg ref="mapPropertySource"></constructor-arg>
     </bean>
     <bean id="mapPropertySource" class="org.springframework.core.env.MapPropertySource">
-        <constructor-arg name="name" value="ssoMapPropertySource"></constructor-arg>
+        <constructor-arg name="name" value="RedisSentinelConfiguration"></constructor-arg>
         <constructor-arg name="source">
             <map>
+                <!-- mymaster -->
                 <entry key="spring.redis.sentinel.master" value="mymaster"></entry>
+                <!-- 10.18.19.67:5000,10.18.19.51:5000,10.18.19.101:5000 -->
                 <entry key="spring.redis.sentinel.nodes" value="10.18.19.67:5000,10.18.19.51:5000,10.18.19.101:5000"></entry>
             </map>
         </constructor-arg>
     </bean>
 
-
-    <!--<bean id="connectionFactory" class="org.springframework.data.redis.connection.jedis.JedisConnectionFactory"-->
-    <!--p:database="0"-->
-    <!--p:password="mypass1">-->
-    <!--<constructor-arg name="sentinelConfig" ref="redisSentinelConfiguration"></constructor-arg>-->
-    <!--<constructor-arg name="poolConfig" ref="poolConfig"></constructor-arg>-->
-    <!--</bean>-->
-    <!--<bean id="poolConfig" class="redis.clients.jedis.JedisPoolConfig">-->
-        <!--<property name="maxIdle" value="200" />-->
-        <!--<property name="testOnBorrow" value="true" />-->
-    <!--</bean>-->
+    <context:property-placeholder ignore-unresolvable="true" system-properties-mode="OVERRIDE" />
+    <bean id="springSessionRepositoryWrapperFilter" class="personal.arc.mvc.jwt.filter.SpringSessionRepositoryWrapperFilter" />
 
 </beans>

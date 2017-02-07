@@ -5,6 +5,7 @@ package personal.arc.mvc.bean;
  */
 public class Person {
 
+    private Long aid;
     private String name;
     private String email;
 
@@ -23,6 +24,15 @@ public class Person {
 
     public Person setEmail(String email) {
         this.email = email;
+        return this;
+    }
+
+    public Long getAid() {
+        return aid;
+    }
+
+    public Person setAid(Long aid) {
+        this.aid = aid;
         return this;
     }
 }
