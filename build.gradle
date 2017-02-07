@@ -15,8 +15,8 @@ apply plugin: 'propdeps-eclipse'
 sourceCompatibility = 1.7
 
 repositories {
-    mavenCentral()
     jcenter()
+    mavenCentral()
 }
 
 buildscript {
