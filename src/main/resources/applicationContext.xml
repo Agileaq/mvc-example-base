@@ -25,7 +25,7 @@
     <bean id="jedisConnectionFactory" class="org.springframework.data.redis.connection.jedis.JedisConnectionFactory">
         <constructor-arg name="sentinelConfig" ref="redisSentinelConfiguration"></constructor-arg>
         <constructor-arg name="poolConfig" ref="redisPoolConfig"></constructor-arg>
-        <!-- <property name="password" value="mypass1" /> -->
+        <property name="password" value="mypass1" />
         <property name="database" value="0" />
     </bean>
 
