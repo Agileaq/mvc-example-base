@@ -2,12 +2,15 @@ package personal.arc.mvc.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.session.data.redis.RedisOperationsSessionRepository;
+import org.springframework.util.ReflectionUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import personal.arc.mvc.bean.Person;
 import personal.arc.mvc.jwt.filter.SpringSessionRepositoryWrapperFilter;
 
 import javax.servlet.http.*;
+import java.lang.reflect.Field;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -27,14 +30,21 @@ public class HelloController {
     }
 
     @RequestMapping("hello")
-    public String sayHello(HttpServletRequest httpServletRequest, HttpServletResponse response) {
+    public String sayHello(HttpServletRequest httpServletRequest, HttpServletResponse response) throws Exception {
         HttpSession httpSession = httpServletRequest.getSession();
         String id = httpSession.getId();
         System.out.println(id);
         String CURRENT_SESSION_ATTR = HttpServletRequestWrapper.class.getName();
-//        httpServletRequest.setAttribute(CURRENT_SESSION_ATTR, "可以将current session给换掉, 但必须是从redis拿出来的HttpSessionWrapper(该类型为private)类型的");
-//        HttpSession httpSession2 = httpServletRequest.getSession();
-
+        httpServletRequest.setAttribute(CURRENT_SESSION_ATTR, null);
+        Cookie[] cookies = httpServletRequest.getCookies();
+        cookies[0].setValue("84f9f5b7-43df-4931-a3fb-7f54a3092ca9");
+        System.out.println(cookies);
+        HttpSession httpSession2 = httpServletRequest.getSession();
+        Class<?> clazz = Class.forName("org.springframework.session.web.http.SessionRepositoryFilter$SessionRepositoryRequestWrapper");
+        Field field = ReflectionUtils.findField(clazz, "requestedSessionIdValid");
+        field.setAccessible(true);
+        ReflectionUtils.setField(field, httpServletRequest, Boolean.FALSE);
+        System.out.println(httpSession2);
         return "Hello world!";
     }
 
